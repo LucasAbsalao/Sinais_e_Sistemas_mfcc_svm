@@ -136,5 +136,6 @@ with open('pca.pkl', 'rb') as pickle_file:
 X_pca = pca.transform(X_scaled)
 
 svc = joblib.load('svm_treinado.pkl')
-predicao = svc.predict(X_pca)
-print("Predicao: ", predicao)
+Y_predicao = svc.predict(X_pca)
+accuracy = sk.metrics.accuracy_score(y, Y_predicao)
+print(sk.metrics.classification_report(y,Y_predicao))

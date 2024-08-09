@@ -105,13 +105,13 @@ for audio in audiosList: #percorre todos os arquivos de audio
     #except Exception as e:
       #print(f'Erro ao processar arquivo')
 
-all_mfcc_datas = np.array(all_mfcc_datas)
+#all_mfcc_datas = np.array(all_mfcc_datas)
 
-print(all_mfccs)
+print(all_mfccs[0])
 
 matrix = all_mfcc_datas
 
-print(matrix)
+#print(matrix)
 labels = np.sort(np.unique(names))
 c2i = {}
 i2c = {}
