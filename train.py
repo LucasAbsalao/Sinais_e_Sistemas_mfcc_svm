@@ -153,7 +153,7 @@ matriz_confusao(labels,c2i,Y_pred,Y_test)
 param = {
     #'kernel' : ['linear', 'poly', 'rbf', 'sigmoid'],
     #'gamma': [0.001, 0.01, 0.1, 1, 10],
-    'C' : [.1, .4, .6, 1, 2, 3, 100, 200]
+    'C' : [.1, .4, .6, 1, 2, 3, 100, 200, 300]
 }
 svm_grid = GridSearchCV(svc, param_grid = param)
 svm_grid.fit(X_train, Y_train)
