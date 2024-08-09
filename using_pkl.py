@@ -7,8 +7,8 @@ Original file is located at
     https://colab.research.google.com/drive/1c9QGuDtxvervdM9v7UH8UANO3T-EVO2A
 """
 
-import numpy as np
 import pickle
+import numpy as np
 import librosa
 import sklearn as sk
 import scipy
@@ -47,7 +47,7 @@ def matriz_confusao(labels, c2i, Y_pred, Y_test):
   cm_disp.plot()
 
 
-file_path = 'audios/**/*.wav'
+file_path = 'audios_teste/**/*.wav'
 audiosList = glob.glob(file_path, recursive = True) #carrega todos os arquivos .wav que estão na pasta audios
 if not audiosList:
     print("Nenhum arquivo de áudio encontrado. Verifique o caminho.")
@@ -131,43 +131,10 @@ for i in range(len(matrix)):
 
 scaler = StandardScaler()
 X_scaled = scaler.fit_transform(matrix)
-pca = PCA(n_components=65).fit(X_scaled)
-with open('pca.pkl', 'wb') as pickle_file:
-  pickle.dump(pca, pickle_file)
+with open('pca.pkl', 'rb') as pickle_file:
+  pca = pickle.load(pickle_file)
 X_pca = pca.transform(X_scaled)
 
-X_train, X_test, Y_train, Y_test = train_test_split(X_pca,y, test_size=0.20, random_state=42, shuffle = True)
-svc = SVC()
-svc.fit(X_train, Y_train)
-
-svc.score(X_test, Y_test)
-
-Y_pred = svc.predict(X_test)
-accuracy = sk.metrics.accuracy_score(Y_test, Y_pred)
-print("Parametro de regularização: ", svc.C)
-print("kernel: ", svc.kernel)
-print("accuracy: ", accuracy)
-
-matriz_confusao(labels,c2i,Y_pred,Y_test)
-
-param = {
-    #'kernel' : ['linear', 'poly', 'rbf', 'sigmoid'],
-    #'gamma': [0.001, 0.01, 0.1, 1, 10],
-    'C' : [.1, .4, .6, 1, 2, 3, 100, 200]
-}
-svm_grid = GridSearchCV(svc, param_grid = param)
-svm_grid.fit(X_train, Y_train)
-
-print(svm_grid.best_params_)
-
-
-novo_svc = SVC(kernel = 'rbf', C = svm_grid.best_params_['C'])
-novo_svc.fit(X_train, Y_train)
-joblib.dump(novo_svc, 'svm_treinado.pkl')
-novo_svc.score(X_test, Y_test)
-
-novo_Y_pred = novo_svc.predict(X_test)
-accuracy = sk.metrics.accuracy_score(Y_test, novo_Y_pred)
-matriz_confusao(labels, c2i, novo_Y_pred, Y_test)
-
-print(sk.metrics.classification_report(Y_test,novo_Y_pred))
+svc = joblib.load('svm_treinado.pkl')
+predicao = svc.predict(X_pca)
+print("Predicao: ", predicao)
