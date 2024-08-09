@@ -110,7 +110,6 @@ all_mfcc_datas = np.array(all_mfcc_datas)
 print(all_mfccs)
 
 matrix = all_mfcc_datas
-
 print(matrix)
 labels = np.sort(np.unique(names))
 c2i = {}
