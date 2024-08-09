@@ -128,6 +128,7 @@ for i in range(len(matrix)):
         matrix[i][j] = 0
 #print(X_to_train[0])
 
+#aplicando_pca
 scaler = StandardScaler()
 X_scaled = scaler.fit_transform(matrix)
 with open('pca.pkl', 'rb') as pickle_file:

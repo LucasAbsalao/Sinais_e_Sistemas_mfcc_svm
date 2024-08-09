@@ -136,7 +136,7 @@ with open('pca.pkl', 'wb') as pickle_file:
   pickle.dump(pca, pickle_file)
 X_pca = pca.transform(X_scaled)
 
-X_train, X_test, Y_train, Y_test = train_test_split(X_pca,y, test_size=0.20, random_state=42, shuffle = True)
+X_train, X_test, Y_train, Y_test = train_test_split(X_pca,y, test_size=0.30, random_state=42, shuffle = True)
 svc = SVC()
 svc.fit(X_train, Y_train)
 
