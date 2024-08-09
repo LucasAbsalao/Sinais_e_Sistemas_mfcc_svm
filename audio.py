@@ -34,12 +34,14 @@ def get_features(mfcc,mel_spect,y):
   mfcc_data = pd.Series(np.hstack((featstack, feat2stack, feat3stack, feat4stack, feat5stack, feat6stack)))
   return mfcc_data
 
-def values_predicted():
-    file_path = 'audios_gravados/*.wav'
+def values_predicted(cont):
+    file_path = 'audios_gravados/**/*.wav'
+
     audiosList = glob.glob(file_path, recursive=True)  # carrega todos os arquivos .wav que estão na pasta audios
     if not audiosList:
         print("Nenhum arquivo de áudio encontrado. Verifique o caminho.")
 
+    print(audiosList)
     all_mfccs = []  # lista de mfccs
     all_mfcc_datas = []
 
@@ -75,7 +77,7 @@ def values_predicted():
     X_pca = pca.transform(X_scaled)
 
     svc = joblib.load('svm_treinado.pkl')
-    Y_predicao = svc.predict(X_pca)
+    Y_predicao = svc.predict(X_pca[:cont])
 
     return Y_predicao
 
@@ -88,8 +90,8 @@ filename = "audio_gravado.wav"
 comando = 3
 cont=0
 
-while comando!=0:
-    print(comando!=0)
+while comando!=0 and cont<10:
+    #print(comando!=0)
     pa = pyaudio.PyAudio()
     stream = pa.open(format=formato,
                      channels=canais,
@@ -98,7 +100,8 @@ while comando!=0:
                      frames_per_buffer=chunks)
 
     frames = []
-    print("Aperte espaço para começar a gravar")
+    print("Aperte espaço para começar a gravar, fale a palavra e aperte espaço para parar (rapidamente)")
+
     keyboard.wait('space')
     print("gravando")
     time.sleep(0.2)
@@ -128,7 +131,8 @@ while comando!=0:
 
     comando = int(input())
 
-idx_predicoes = values_predicted()
+print("realizando predicoes")
+idx_predicoes = values_predicted(cont)
 print(idx_predicoes)
 for i,idx in enumerate(idx_predicoes):
     print(i,': ',translate[idx])
